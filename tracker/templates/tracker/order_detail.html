@@ -976,7 +976,7 @@
                     <td class="text-end action-buttons-compact">
                       <a href="{{ url }}" target="_blank" class="btn btn-sm btn-outline-primary"><i class="fa fa-eye me-1"></i>View</a>
                       <a href="{{ url }}" download class="btn btn-sm btn-outline-secondary"><i class="fa fa-download me-1"></i>Download</a>
-                      {% if order.status != 'completed' and order.status != 'cancelled' and order.type != 'inquiry' %}
+                      {% if order.status != 'cancelled' and order.type != 'inquiry' %}
                       <button type="button" class="btn btn-sm btn-success sign-existing-doc" data-file-url="{{ url }}" data-file-name="{{ name }}" data-attachment-id="{{ att.id }}" data-bs-toggle="modal" data-bs-target="#signExistingModal"><i class="fa fa-pen me-1"></i>Sign</button>
                       {% endif %}
                     </td>
