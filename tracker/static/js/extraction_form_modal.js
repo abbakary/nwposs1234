@@ -52,6 +52,17 @@ class ExtractionFormModal {
       input.addEventListener('change', () => self.handleCustomerTypeChange());
     });
 
+    // Component type selection (for adding another item/service)
+    document.querySelectorAll('input[name="component_type"]').forEach(input => {
+      input.addEventListener('change', () => self.handleComponentTypeChange());
+    });
+
+    // Add component checkbox
+    const addComponentCheckbox = document.getElementById('addComponentCheckbox');
+    if (addComponentCheckbox) {
+      addComponentCheckbox.addEventListener('change', () => self.handleAddComponentToggle());
+    }
+
     // Step navigation
     document.getElementById('extractionNextBtn').addEventListener('click', () => self.nextStep());
     document.getElementById('extractionPrevBtn').addEventListener('click', () => self.prevStep());
