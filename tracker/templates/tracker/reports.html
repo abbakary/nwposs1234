@@ -158,7 +158,6 @@
                   <td>{{ o.customer.full_name }}</td>
                   <td class="text-capitalize">{{ o.type }}</td>
                   <td><span class="badge {% if o.status == 'completed' %}badge-success{% elif o.status == 'in_progress' %}badge-warning{% elif o.status == 'cancelled' %}badge-danger{% else %}badge-secondary{% endif %}">{{ o.status|title }}</span></td>
-                  <td class="text-capitalize">{{ o.priority }}</td>
                   <td>{{ o.created_at|date:'Y-m-d H:i' }}</td>
                 </tr>
                 {% empty %}
