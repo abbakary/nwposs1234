@@ -111,27 +111,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-md-6">
-              <div class="d-flex align-items-center mb-3">
-                <div class="bg-warning bg-opacity-10 rounded-circle p-2 me-3">
-                  <i class="fa fa-flag text-warning"></i>
-                </div>
-                <div>
-                  <small class="text-muted d-block">Priority</small>
-                  {% if order.priority == 'low' %}
-                    <span class="badge bg-success text-white">Low</span>
-                  {% elif order.priority == 'medium' %}
-                    <span class="badge bg-primary text-white">Medium</span>
-                  {% elif order.priority == 'high' %}
-                    <span class="badge bg-warning text-dark">High</span>
-                  {% elif order.priority == 'urgent' %}
-                    <span class="badge bg-danger text-white"><i class="fa fa-fire me-1"></i>Urgent</span>
-                  {% else %}
-                    <span class="badge bg-secondary text-white">{{ order.priority }}</span>
-                  {% endif %}
-                </div>
-              </div>
-            </div>
+
           </div>
           <hr class="my-3">
           <div class="row g-3">
@@ -432,27 +412,7 @@
                 </div>
               </div>
             </div>
-            <div class="col-md-6">
-              <div class="d-flex align-items-center mb-3">
-                <div class="bg-warning bg-opacity-10 rounded-circle p-2 me-3">
-                  <i class="fa fa-flag text-warning"></i>
-                </div>
-                <div>
-                  <small class="text-muted d-block">Priority</small>
-                  {% if order.priority == 'low' %}
-                    <span class="badge bg-success text-white">Low</span>
-                  {% elif order.priority == 'medium' %}
-                    <span class="badge bg-primary text-white">Medium</span>
-                  {% elif order.priority == 'high' %}
-                    <span class="badge bg-warning text-dark">High</span>
-                  {% elif order.priority == 'urgent' %}
-                    <span class="badge bg-danger text-white"><i class="fa fa-fire me-1"></i>Urgent</span>
-                  {% else %}
-                    <span class="badge bg-secondary text-white">{{ order.priority }}</span>
-                  {% endif %}
-                </div>
-              </div>
-            </div>
+
           </div>
           <hr class="my-3">
           <div class="row g-3">
