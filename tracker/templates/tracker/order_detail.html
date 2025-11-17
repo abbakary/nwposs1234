@@ -1205,25 +1205,32 @@
             <!-- Document Selection Tab -->
             <div class="tab-pane fade show active" id="documentSection" role="tabpanel">
               <div class="mb-4">
-                <h6 class="text-dark mb-3"><i class="fa fa-file me-2"></i>Choose Document to Sign</h6>
-                <p class="text-muted small mb-3">Select an existing document from below or upload a new one:</p>
+                <div class="alert alert-primary bg-primary bg-opacity-10 border-primary mb-4">
+                  <i class="fa fa-info-circle me-2"></i>
+                  <strong>Select a document to sign:</strong> Choose from existing documents or upload a new one. The selected document will be displayed below.
+                </div>
 
                 <!-- Existing Documents -->
                 {% if order.attachments.all or order.completion_attachment %}
                 <div class="mb-4">
-                  <h6 class="text-muted mb-2"><i class="fa fa-check-circle text-success me-1"></i>Available Documents</h6>
-                  <div class="document-list-group">
+                  <h6 class="text-muted mb-3"><i class="fa fa-file text-success me-1"></i>Available Documents</h6>
+                  <div class="document-list-selection">
                     {% for att in order.attachments.all %}
-                    <div class="document-option mb-2">
+                    <div class="document-selection-item mb-2">
                       <div class="form-check">
-                        <input class="form-check-input doc-selector" type="radio" name="document_choice" id="doc-{{ att.id }}" value="attachment-{{ att.id }}" data-doc-name="{{ att.filename|default:att.file.name }}">
-                        <label class="form-check-label w-100" for="doc-{{ att.id }}">
-                          <div class="d-flex align-items-center">
-                            <i class="fa fa-paperclip text-muted me-2"></i>
-                            <div>
-                              <div class="fw-medium">{{ att.filename|default:att.file.name }}</div>
-                              <small class="text-muted d-block">Uploaded {{ att.uploaded_at|localtime|date:"M j, Y g:i a" }}</small>
+                        <input class="form-check-input doc-selector" type="radio" name="document_choice" id="doc-{{ att.id }}" value="attachment-{{ att.id }}" data-doc-name="{{ att.filename|default:att.file.name }}" data-doc-type="supporting">
+                        <label class="form-check-label w-100 flex-grow-1" for="doc-{{ att.id }}">
+                          <div class="d-flex align-items-center justify-content-between w-100">
+                            <div class="d-flex align-items-center flex-grow-1">
+                              <div class="doc-selector-icon">
+                                <i class="fa fa-file-pdf"></i>
+                              </div>
+                              <div>
+                                <div class="fw-semibold">{{ att.filename|default:att.file.name }}</div>
+                                <small class="text-muted d-block">Uploaded {{ att.uploaded_at|localtime|date:"M j, Y g:i a" }}</small>
+                              </div>
                             </div>
+                            <span class="badge bg-secondary">Supporting Document</span>
                           </div>
                         </label>
                       </div>
@@ -1231,16 +1238,21 @@
                     {% endfor %}
 
                     {% if order.completion_attachment %}
-                    <div class="document-option mb-2">
+                    <div class="document-selection-item mb-2">
                       <div class="form-check">
-                        <input class="form-check-input doc-selector" type="radio" name="document_choice" id="doc-completion" value="completion" data-doc-name="Completion Document">
-                        <label class="form-check-label w-100" for="doc-completion">
-                          <div class="d-flex align-items-center">
-                            <i class="fa fa-file-contract text-info me-2"></i>
-                            <div>
-                              <div class="fw-medium">Completion Document</div>
-                              <small class="text-muted d-block">Final document for signature</small>
+                        <input class="form-check-input doc-selector" type="radio" name="document_choice" id="doc-completion" value="completion" data-doc-name="Completion Document" data-doc-type="completion">
+                        <label class="form-check-label w-100 flex-grow-1" for="doc-completion">
+                          <div class="d-flex align-items-center justify-content-between w-100">
+                            <div class="d-flex align-items-center flex-grow-1">
+                              <div class="doc-selector-icon">
+                                <i class="fa fa-file-contract"></i>
+                              </div>
+                              <div>
+                                <div class="fw-semibold">Completion Document</div>
+                                <small class="text-muted d-block">Final document for completion & signature</small>
+                              </div>
                             </div>
+                            <span class="badge bg-success">Completion</span>
                           </div>
                         </label>
                       </div>
@@ -1251,18 +1263,32 @@
                 {% endif %}
 
                 <!-- New Document Upload -->
-                <div class="upload-section">
-                  <h6 class="text-muted mb-2"><i class="fa fa-cloud-upload-alt me-1"></i>Or Upload a New Document</h6>
+                <div class="upload-new-document-section">
+                  <h6 class="text-muted mb-3"><i class="fa fa-cloud-upload-alt me-2 text-warning"></i>Upload a New Document</h6>
                   <div class="mb-3">
-                    <input type="file" id="attachmentInput" name="completion_attachment" class="form-control" accept="image/*,.pdf" data-doc-name="Newly uploaded document">
+                    <div class="upload-document-input-wrapper">
+                      <input type="file" id="attachmentInput" name="completion_attachment" class="form-control form-control-lg" accept="image/*,.pdf" data-doc-name="Newly uploaded document">
+                      <small class="text-muted d-block mt-2">Supported formats: PDF, PNG, JPG, JPEG</small>
+                    </div>
                   </div>
                 </div>
 
-                <!-- Selected Document Display -->
-                <div id="selectedDocInfo" style="display: none;">
-                  <div class="alert alert-info bg-info bg-opacity-10 border-info">
-                    <i class="fa fa-check-circle me-2"></i>
-                    <strong>Selected:</strong> <span id="selectedDocName"></span>
+                <!-- Selected Document Summary -->
+                <div id="selectedDocInfo" class="mt-4" style="display: none;">
+                  <div class="selected-document-summary">
+                    <div class="summary-header">
+                      <i class="fa fa-check-circle text-success me-2"></i>
+                      <strong>Document Selected</strong>
+                    </div>
+                    <div class="summary-content">
+                      <div class="d-flex align-items-center gap-2">
+                        <i class="fa fa-file-alt text-primary fa-lg"></i>
+                        <div>
+                          <div class="fw-semibold text-dark" id="selectedDocName"></div>
+                          <small class="text-muted">This document will be signed in the next step</small>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
