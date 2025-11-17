@@ -825,7 +825,6 @@
                                         {% endif %}
                                     </td>
                                     <td><span class="status-badge status-badge-{{ order.status|to_css_class }}">{{ order.get_status_display }}</span></td>
-                                    <td><span class="priority-badge priority-badge-{{ order.priority|to_css_class }}">{{ order.get_priority_display }}</span></td>
                                     <td>
                                         <small>
                                             {{ order.created_at|custom_date }}
