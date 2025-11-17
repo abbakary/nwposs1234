@@ -251,7 +251,7 @@
                   <button class="btn btn-primary flex-fill" type="submit">
                     <i class="fa fa-filter me-1"></i> Filter
                   </button>
-                  {% if request.GET.status or request.GET.type or request.GET.priority or request.GET.date_range or request.GET.branch %}
+                  {% if request.GET.status or request.GET.type or request.GET.date_range or request.GET.branch %}
                   <a href="{% url 'tracker:orders_list' %}" class="btn btn-outline-secondary" title="Clear Filters">
                     <i class="fa fa-times"></i>
                   </a>
