@@ -4339,16 +4339,18 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Initialize PDF embeds for ALL orders (completed/cancelled too)
     initializePdfEmbeds();
-    
+
     // Only initialize modal-related functionality for active orders
     if (!isFinalStatus) {
       initializeFormToggles();
       initializeSignaturePad();
-      initializeExistingDocSigning();
     } else {
-      console.log('Order is completed or cancelled - skipping modal initialization');
+      console.log('Order is completed or cancelled - skipping main order completion modal initialization');
     }
-    
+
+    // Always initialize existing document signing (even for completed orders to allow signing supporting docs)
+    initializeExistingDocSigning();
+
     // Always initialize time tracking
     updateTimeTrackingDisplay();
     
