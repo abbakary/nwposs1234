@@ -313,76 +313,130 @@
   <!-- ALL OTHER ORDER TYPES (SERVICE, SALES) - KEEP EXACTLY THE SAME -->
   <div class="row">
     <div class="col-lg-8">
-      <!-- Time Tracking -->
-      <div class="card shadow-sm mb-4 time-tracking-card">
-        <div class="card-header bg-light">
-          <h6 class="mb-0"><i class="fa fa-clock me-2"></i>Time Summary</h6>
+      <!-- Time Summary & Additional Information Combined Card -->
+      <div class="card shadow-sm mb-4 time-info-combined-card">
+        <div class="card-header bg-gradient-primary text-white">
+          <h6 class="mb-0"><i class="fa fa-hourglass-half me-2"></i>Order Timeline & Information</h6>
         </div>
         <div class="card-body">
-          <div class="time-tracking-overview">
-            {% if order.completed_at %}
-            <div class="time-tracking-stat">
-              <span class="time-tracking-label">Actual Time</span>
-              <span class="time-tracking-value" id="timeActualValue">
-                {% if order.completed_at and order.created_at %}
-                  {{ order.completed_at|timesince:order.created_at }}
-                {% else %}
-                  Calculating...
-                {% endif %}
-              </span>
+          <div class="row g-4">
+            <!-- Time Metrics Section -->
+            <div class="col-lg-6 col-md-12">
+              <div class="time-metrics-group">
+                <h6 class="text-muted mb-3"><i class="fa fa-clock me-2"></i>Time Metrics</h6>
+                <div class="time-metrics-list">
+                  {% if order.completed_at %}
+                  <div class="metric-row">
+                    <span class="metric-label">Actual Duration</span>
+                    <span class="metric-value fw-bold text-success" id="timeActualValue">
+                      {% if order.actual_duration %}
+                        {{ order.actual_duration }} minutes
+                      {% elif order.completed_at and order.created_at %}
+                        {{ order.completed_at|timesince:order.created_at }}
+                      {% else %}
+                        Calculating...
+                      {% endif %}
+                    </span>
+                  </div>
+                  {% else %}
+                  <div class="metric-row">
+                    <span class="metric-label">Elapsed Time</span>
+                    <span class="metric-value fw-bold text-info" id="timeElapsedValue">--</span>
+                  </div>
+                  {% endif %}
+
+                  {% if order.estimated_duration %}
+                  <div class="metric-row">
+                    <span class="metric-label">Estimated Duration</span>
+                    <span class="metric-value fw-bold text-warning">{{ order.estimated_duration }} minutes</span>
+                  </div>
+                  {% endif %}
+
+                  {% if order.completed_at %}
+                  <div class="metric-row">
+                    <span class="metric-label">Completion Date</span>
+                    <span class="metric-value fw-medium text-dark">{{ order.completed_at|localtime|date_medium }}</span>
+                  </div>
+                  {% endif %}
+
+                  {% if order.signed_by %}
+                  <div class="metric-row">
+                    <span class="metric-label">Signed By</span>
+                    <span class="metric-value fw-medium text-dark">{{ order.signed_by.get_full_name|default:order.signed_by.username }}</span>
+                  </div>
+                  {% endif %}
+                </div>
+              </div>
             </div>
-            {% else %}
-            <div class="time-tracking-stat">
-              <span class="time-tracking-label">Elapsed Time</span>
-              <span class="time-tracking-value" id="timeElapsedValue">--</span>
+
+            <!-- Timeline Events Section -->
+            <div class="col-lg-6 col-md-12">
+              <div class="timeline-events-group">
+                <h6 class="text-muted mb-3"><i class="fa fa-timeline me-2"></i>Event Timeline</h6>
+                <div class="timeline-events-list">
+                  <div class="timeline-event-item">
+                    <div class="event-marker created">
+                      <i class="fa fa-plus-circle"></i>
+                    </div>
+                    <div class="event-details">
+                      <div class="event-label">Created</div>
+                      <div class="event-time">{{ order.created_at|localtime|date:"M j, Y g:i a" }}</div>
+                    </div>
+                  </div>
+
+                  {% if order.started_at %}
+                  <div class="timeline-event-item">
+                    <div class="event-marker started">
+                      <i class="fa fa-play-circle"></i>
+                    </div>
+                    <div class="event-details">
+                      <div class="event-label">Started</div>
+                      <div class="event-time">{{ order.started_at|localtime|date:"M j, Y g:i a" }}</div>
+                    </div>
+                  </div>
+                  {% endif %}
+
+                  {% if order.completed_at %}
+                  <div class="timeline-event-item">
+                    <div class="event-marker completed">
+                      <i class="fa fa-check-circle"></i>
+                    </div>
+                    <div class="event-details">
+                      <div class="event-label">Completed</div>
+                      <div class="event-time">{{ order.completed_at|localtime|date:"M j, Y g:i a" }}</div>
+                    </div>
+                  </div>
+                  {% endif %}
+
+                  {% if order.cancelled_at %}
+                  <div class="timeline-event-item">
+                    <div class="event-marker cancelled">
+                      <i class="fa fa-times-circle"></i>
+                    </div>
+                    <div class="event-details">
+                      <div class="event-label">Cancelled</div>
+                      <div class="event-time">{{ order.cancelled_at|localtime|date:"M j, Y g:i a" }}</div>
+                    </div>
+                  </div>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+
+            <!-- Delay Reason (if applicable) -->
+            {% if order.overrun_reason %}
+            <div class="col-12">
+              <div class="alert alert-warning bg-warning bg-opacity-10 border-warning">
+                <div class="d-flex align-items-start">
+                  <i class="fa fa-exclamation-triangle text-warning me-3 mt-1"></i>
+                  <div>
+                    <strong>Reason for Delay</strong>
+                    <p class="mb-0 mt-1 text-dark">{{ order.overrun_reason }}</p>
+                  </div>
+                </div>
+              </div>
             </div>
             {% endif %}
-
-            {% if order.estimated_duration and order.status != 'completed' %}
-            <div class="time-tracking-stat">
-              <span class="time-tracking-label">Estimated Duration</span>
-              <span class="time-tracking-value">{{ order.estimated_duration }} mins</span>
-            </div>
-            {% endif %}
-          </div>
-
-          <!-- Timeline Section -->
-          <div class="mt-4">
-            <div class="timeline-compact">
-              <div class="timeline-compact-item">
-                <div class="timeline-compact-marker">
-                  <i class="fa fa-plus-circle text-primary"></i>
-                </div>
-                <div class="timeline-compact-content">
-                  <small class="text-muted">Created</small>
-                  <div class="fw-medium">{{ order.created_at|localtime|date:"M j, Y g:i a" }}</div>
-                </div>
-              </div>
-
-              {% if order.started_at %}
-              <div class="timeline-compact-item">
-                <div class="timeline-compact-marker">
-                  <i class="fa fa-play-circle text-warning"></i>
-                </div>
-                <div class="timeline-compact-content">
-                  <small class="text-muted">Started</small>
-                  <div class="fw-medium">{{ order.started_at|localtime|date:"M j, Y g:i a" }}</div>
-                </div>
-              </div>
-              {% endif %}
-
-              {% if order.completed_at %}
-              <div class="timeline-compact-item">
-                <div class="timeline-compact-marker">
-                  <i class="fa fa-check-circle text-success"></i>
-                </div>
-                <div class="timeline-compact-content">
-                  <small class="text-muted">Completed</small>
-                  <div class="fw-medium">{{ order.completed_at|localtime|date:"M j, Y g:i a" }}</div>
-                </div>
-              </div>
-              {% endif %}
-            </div>
           </div>
         </div>
       </div>
